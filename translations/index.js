@@ -1,6 +1,6 @@
+/*
 const library = {
-  ko: require('./library/ko'),
-  en: require('./library/en')
+  language: require('./library/path/to/file')
 }
 
 module.exports = (language, data) => {
@@ -10,7 +10,16 @@ module.exports = (language, data) => {
 
 module.exports.library = library
 module.exports.contributors = {
-  ko: 'Seia#0002;324541397988409355',
-  en: 'Seia#0002;324541397988409355',
-  ja: 'Choux_a_la_Creme#8181;246868596968390657'
+  ko: 'NickName OR User (recognizable);Identificate'
 }
+
+
+* This handled by each plugins and below is description for this object.
+
+
+In this code, you can see some modules.
+
+- this.Library is an object for defining the path for each translation dictionary. JSON is recommended to use, but you can write in any language JavaScript can access.
+- this.Contributors is an object for describing who wrote this translate. Just recommended.
+- [this] is a module for loading translation files on a top, actually defined in variable library. You can customize it to make additional performance.
+*/

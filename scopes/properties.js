@@ -1,6 +1,6 @@
 module.exports = {
   application: {
-    prefix: 'b;',
+    prefix: 'YOUR_PREFIX',
     permissions: {
       administrate: 0b001,
       moderate: 0b010,
@@ -12,10 +12,10 @@ module.exports = {
       autoReconnect: true,
       disableEveryone: true
     },
-    token: 'N',
-    invite: 'https://discordapp.com/oauth2/authorize?client_id=429913480708096000&permissions=8&scope=bot'
+    token: 'APPLICATION_TOKEN',
+    invite: 'https://discordapp.com/oauth2/authorize?client_id=[CLIENT_ID]&permissions=[PERMISSION_NUMBERIC_STRING]&scope=bot'
   },
   embed: {
-    color: 16761035
+    color: 16761035 // NOTE: This is a JavaScript's hex encoded color-code.
   }
 }

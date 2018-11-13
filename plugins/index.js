@@ -1,108 +1,36 @@
-// NOTE: Generic
-module.exports.help = {
-  execute: require('./generic/help'),
-  usage: 'help [command]',
-  permissions: 'common'
-}
-module.exports.language = {
-  execute: require('./generic/language'),
-  usage: 'language <language>',
-  permissions: 'common'
-}
-module.exports.lang = this.language
-module.exports.ping = {
-  execute: require('./generic/ping'),
-  usage: 'ping',
-  permissions: 'common'
-}
-module.exports.pong = this.ping
-module.exports.welcome = {
-  execute: require('./generic/welcome'),
-  usage: 'welcome <message>',
+/*
+module.exports.pluginName = {
+  execute: require('./path/to/plugin'),
+  usage: 'pluginName [variables]',
   permissions: 'common'
 }
 
-// NOTE: Crypto
-module.exports.crypto = {
-  execute: require('./crypto/crypto'),
-  usage: 'crypto [algorithm] [hash]',
-  permissions: 'common'
-}
-module.exports.md5 = {
-  execute: require('./crypto/md5'),
-  usage: 'md5 [context]',
-  permissions: 'common'
+* This handled by '/index.js' as if a array or object.
+
+
+In 'pluginName' object... (Object: plugin)
+
+- plugin.Execute is the path to executable plugin(Module).
+- plugin.Usage is just a helper. If you want to see a usage, please read the code(Seia-Soto/Serium ../plugins/generic/help.js).
+- plugin.Permissions is the string type of permission handler can be interprete. For additional, 'moderate' and 'administrate' is available.
+
+And you can handle by your hand like adding un-basic given properties.
+Properties can handled by 'plugin.variableName' in '/index.js'.
+
+
+----
+
+module.exports = (client, message, data, translate) => {
+  // code...
 }
 
-// NOTE: Fun
-module.exports.coinflip = {
-  execute: require('./fun/coinflip'),
-  usage: 'coinflip',
-  permissions: 'common'
-}
-module.exports.if = {
-  execute: require('./fun/if'),
-  usage: 'if [context]',
-  permissions: 'common'
-}
-module.exports.say = {
-  execute: require('./fun/say'),
-  usage: 'say [context]',
-  permissions: 'common'
-}
-module.exports.sayd = {
-  execute: require('./fun/sayd'),
-  usage: 'sayd [context]',
-  permissions: 'common'
-}
+* This handled by it-self.
 
-// NOTE: Game
-module.exports.arcaea = {
-  execute: require('./game/arcaea'),
-  usage: 'arcaea',
-  permissions: 'common'
-}
 
-// NOTE: Image
-module.exports.avatar = {
-  execute: require('./image/avatar'),
-  usage: 'avatar [mention]',
-  permissions: 'common'
-}
-module.exports.cat = {
-  execute: require('./image/cat'),
-  usage: 'cat',
-  permissions: 'common'
-}
-module.exports.dog = {
-  execute: require('./image/dog'),
-  usage: 'dog',
-  permissions: 'common'
-}
-module.exports.neko = {
-  execute: require('./image/neko'),
-  usage: 'dog',
-  permissions: 'common'
-}
+In 'plugin' object... (Object: plugin)
 
-// NOTE: Util
-module.exports.serverinfo = {
-  execute: require('./util/serverinfo'),
-  usage: 'serverinfo',
-  permissions: 'common'
-}
-module.exports.userinfo = {
-  execute: require('./util/userinfo'),
-  usage: 'userinfo [@mention]',
-  permissions: 'common'
-}
-module.exports.wiki = {
-  execute: require('./util/wiki'),
-  usage: 'wiki [keyword]',
-  permissions: 'common'
-}
-module.exports.translate = {
-  execute: require('./util/translate'),
-  usage: 'translate [to(language)] [context]',
-  permissions: 'common'
-}
+- this.Client gives you a client object of Discord.JS.
+- this.Message gives you a message object of Discord.JS.
+- this.Data gives you a handler and accesspoints to Serium-Framework's API.
+- this.Translate gives you a handled translate object.
+*/

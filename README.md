@@ -1,137 +1,120 @@
 # Serium
-[![license]](/LICENSE)
-
+You can see more detailed descriptions in each file.
 ----
 
 The way how to get improved creativity and multi-purpose in Discord.
 
 ## Table of Contents
 
-- [Terms](#terms)
-  - [Terms of Service](#terms-of-service)
-  - [License](#license)
-- [Installation](#installation)
-  - [Requirements](#requirements)
-  - [Cloning into yours](#cloning-into-yours)
-  - [Installing dependencies](#installing-dependencies)
-  - [Setting up](#setting-up)
-    - [Modifying properties](#modifying-properties)
-    - [Definition of administrator](#definition-of-administrator)
-  - [Starting process](#starting-process)
-- [Plugins(commands)](#plugins)
+- [Assets](#assets)
 
-## Terms
 
-### Terms of service
 
-[Korean](https://b2.seia.io/terms)
 
-### License
+## Assets
 
-Copyright 2018 Seia-Soto, All rights reserved.
 
-with [Artistic 2.0](/LICENSE)
+### API
 
-## Installation
+#### Reading datas
 
-### Requirements
+When the application starts up with logs, Serium collects JSON Objects and keep it into JavaScript Objects to use in plugins.
 
-You need below softwares before launching Serium.
-* [NodeJS](https://nodejs.org)
-* NPM (this will installed when NodeJS installation)
+Then the JavaScript handles it into a shacked data variable when the plugin executed.
 
-### Cloning-into-yours
-
-First at all, please clone this project to your server.
-```
-git clone https://github.com/Seia-Soto/Serium.git
-cd ./Serium
-```
-
-### Installing-dependencies
-
-Then install the dependencies into project.
-```
-npm i -s
-```
-
-### Setting-up
-
-#### Definition-of-administrator
-
-The way how to define administrator of the application.
-```
-cd ./structures/construct
-vi permissions.js
-```
-
-Change the array named special(this.special) below to yours.
 ```js
-// NOTE: ./structures/construct/permissions.js
+module.exports = (client, message, data, translate) => {
+  data.stores... // NOTE: You may get datas by using this method.
 
-const properties = require('../../scopes/properties')
-
-module.exports = message => {
-  const special = [
-    //'324541397988409355' // NOTE: Seia#0002
-    'YOUR ID HERE',
-    'DEFINE OTHER',
-    ...
-  ]
-  let permission = properties.application.permissions.common
-
-  if (message.member.permissions.has('MANAGE_GUILD')) permission = (permission | properties.application.permissions.moderate)
-  if (message.author.id in special) permission = (permission | properties.application.permissions.administrate)
-
-  return permission
+  // Example
+  const lastData = data.stores.guilds.VARIABLE
 }
 ```
 
-#### Modifying-properties
+#### Writing datas
 
-**Serium has [ToS](https://b2.seia.io/terms) in Korean, please do not remove link of ToS.**
+You need to edit or copy it into new variable from [original](#Reading-data).
 
-Next is link of invite.
-```
-cd ./scopes
-vi properties.js
-```
+After modifying the data, you can call event handler handled by '/index.js' and emit 'modified' event, then you can see your modified data writen with File Stream.
 
-Change the String in variables(this.client.invite, this.client.application.prefix).
 ```js
-// NOTE: ./scopes/properties.js
+module.exports = (client, message, data, translate) => {
+  data.assets.emit('modified', 'guilds', modified) // NOTE: The second variable guilds means '/assets/guilds.json'.
+}
+```
 
-module.exports = {
-  application: {
-    prefix: ';',
-    permissions: {
-      administrate: 0b001,
-      moderate: 0b010,
-      common: 0b100
-    }
-  },
-  client: {
-    options: {
-      autoReconnect: true,
-      disableEveryone: true
-    },
-    token: 'N',
-    invite: 'https://discordapp.com/oauth2/authorize?client_id=429913480708096000&permissions=8&scope=bot'
-  },
-  embed: {
-    color: 16761035
+#### Register data file into map
+
+When you need thirdparty storage to extend plugin's additional strong feature, you may register its path and parser into '/index.js'.
+
+```js
+// /index.js:21
+let assets = {
+  users: JSON.parse(fs.readFileSync('./assets/users.json', 'utf8')),
+  guilds: JSON.parse(fs.readFileSync('./assets/guilds.json', 'utf8')),
+
+  thirdparties: {
+    // NOTE: Additional thirdparty assets can be located in here, recommended.
   }
 }
 ```
 
-### Starting process
 
-Just launch! If you want to launch it 24/7, use package manager for uptime.
+### Storages
 
+
+#### assets/guilds.json
+
+This is a file for store guild settings like welcome messages(for example...).
+
+```json
+{
+  "GUILD_ID": {
+    "__KEY__": "__VALUE__"
+  }
+}
 ```
-node .
+
+#### assets/users.json
+
+This is a file for store user settings like language pre-set(for example...).
+
+```json
+{
+  "USER_ID": {
+    "language": "LANGUAGE_CODE",
+    "__KEY__": "__VALUE__"
+  }
+}
 ```
+
+
 
 ## Plugins
 
-This won't descripted! Please see the help documentation in the bot or website.
+
+### Guide
+
+#### Adding a plugin
+
+For general, adding a file into directory that can categorize the plugin is recommended.
+
+So, next step is inserting default template into new file.
+
+```js
+module.exports = (client, message, data, translate) => {
+  // code...
+}
+```
+
+Done, and the next step is registering the plugin into a map.
+
+Goto ``plugins/index.js`` and add below string(customize as yours).
+
+```js
+module.exports.pluginName = {
+  execute: require('./path/to/plugin'),
+  usage: 'pluginName [variables]',
+  permissions: 'common'
+}
+```
