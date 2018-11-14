@@ -24,7 +24,9 @@ let assets = {
 
   thirdparties: {
     // NOTE: Additional thirdparty assets can be located in here, recommended.
-  }
+  },
+
+  handle: data
 }
 data.on('modified', (which, input) => {
   const storage = `./assets/${which}.json`
@@ -36,11 +38,12 @@ data.on('modified', (which, input) => {
 client.login(scopes.properties.client.token)
 client.on('ready', () => {
   console.log('Connected to Discord at ' + new Date())
+
+  client.user.setPresence(scopes.properties.client.presence)
 })
 client.on('message', message => {
   const options = {
-    assets: data,
-    stores: assets,
+    assets: assets,
     application: scopes.properties,
     guild: structures.construct.guild(client, message),
     message: structures.construct.message(message),
