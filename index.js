@@ -10,6 +10,7 @@ const Discord = require('discord.js')
 const Events = require('events')
 const fs = require('fs')
 
+const extensions = require('./extensions')
 const plugins = require('./plugins')
 const scopes = require('./scopes')
 const structures = require('./structures')
@@ -28,10 +29,9 @@ let assets = {
 
   handle: data
 }
-data.on('modified', (which, input) => {
-  const storage = `./assets/${which}.json`
 
-  fs.writeFileSync(storage, JSON.stringify(input), 'utf8')
+data.on('modified', (which, input) => {
+  fs.writeFile(`./assets/${which}.json`, JSON.stringify(input), 'utf8')
   assets[which] = input
 })
 
@@ -44,6 +44,7 @@ client.on('ready', () => {
 client.on('message', message => {
   const options = {
     assets: assets,
+    extensions: extensions,
     application: scopes.properties,
     guild: structures.construct.guild(client, message),
     message: structures.construct.message(message),
@@ -60,13 +61,15 @@ client.on('message', message => {
 
   const translate = translations(options.user.language)
   const plugin = plugins[options.message.construct]
+
   const evaluation = [
     (message.channel.type === 'text'),
     ((options.permissions & scopes.properties.application.permissions[plugin.permissions]) === scopes.properties.application.permissions[plugin.permissions])
   ]
-
   if (evaluation.includes(false)) return message.reply(translate.generic.errors.evaluation[evaluation.indexOf(false)])
+
   message.channel.startTyping()
+  extensions.fetch(undefined, client, options, plugin, translate)
   plugin.execute(client, message, options, translate)
   message.channel.stopTyping()
 })

@@ -20,6 +20,7 @@ The way how to get improved creativity and multi-purpose in Discord.
 **Detailed**
 - [Assets](#assets)
 - [Plugins](#plugins)
+- [Extensions](#extensions)
 
 
 
@@ -220,9 +221,7 @@ This is a file for store user settings like language pre-set(for example...).
 
 # Plugins
 
-## Guide
-
-### Adding a plugin
+## Add
 
 For general, adding a file into directory that can categorize the plugin is recommended.
 
@@ -245,3 +244,7 @@ module.exports.pluginName = {
   permissions: 'common'
 }
 ```
+
+# Extensions
+
+Not ready.

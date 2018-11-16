@@ -5,7 +5,7 @@ module.exports.pluginName = {
   permissions: 'common'
 }
 
-* This handled by '/index.js' as if a array or object.
+* This handled by '/index.js' as if an array or object.
 
 
 In 'pluginName' object... (Object: plugin)
