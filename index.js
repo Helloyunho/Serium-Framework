@@ -25,7 +25,9 @@ let assets = {
   guilds: JSON.parse(fs.readFileSync('./assets/guilds.json', 'utf8')),
 
   thirdparties: {
-    // NOTE: Additional thirdparty assets can be located in here, recommended.
+    usageLogger: {
+      usage: JSON.parse(fs.readFileSync('./assets/thirdparties/usageLogger/usage.json', 'utf8'))
+    }
   },
 
   handle: data
@@ -45,7 +47,6 @@ client.on('ready', () => {
 client.on('message', message => {
   const options = {
     assets: assets,
-    extensions: extensions,
     application: scopes.properties,
     guild: structures.construct.guild(client, message),
     message: structures.construct.message(message),
@@ -60,8 +61,8 @@ client.on('message', message => {
     (!plugins[options.message.construct])
   if (enviroment) return
 
-  const translate = translations(options.user.language)
-  const plugin = plugins[options.message.construct]
+  let translate = translations(options.user.language)
+  let plugin = plugins[options.message.construct]
 
   const evaluation = [
     (message.channel.type === 'text'),
@@ -70,7 +71,7 @@ client.on('message', message => {
   if (evaluation.includes(false)) return message.reply(translate.generic.errors.evaluation[evaluation.indexOf(false)])
 
   message.channel.startTyping()
-  extensions.fetch(undefined, client, options, plugin, translate)
+  extensions.fetch(client, message, options)
   plugin.execute(client, message, options, translate)
   message.channel.stopTyping()
 })

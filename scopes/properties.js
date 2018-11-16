@@ -24,5 +24,8 @@ module.exports = {
   },
   embed: {
     color: 16761035 // NOTE: This is a JavaScript's hex encoded color-code.
+  },
+  thirdparties: {
+    // NOTE: This is configurations for thirdparty extensions
   }
 }
