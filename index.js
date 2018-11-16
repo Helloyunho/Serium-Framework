@@ -10,6 +10,7 @@ const Discord = require('discord.js')
 const Events = require('events')
 const fs = require('fs')
 
+const callbacks = require('./callbacks')
 const extensions = require('./extensions')
 const plugins = require('./plugins')
 const scopes = require('./scopes')
@@ -31,7 +32,7 @@ let assets = {
 }
 
 data.on('modified', (which, input) => {
-  fs.writeFile(`./assets/${which}.json`, JSON.stringify(input), 'utf8')
+  fs.writeFile(`./assets/${which}.json`, JSON.stringify(input), 'utf8', callbacks.fs.writeFile)
   assets[which] = input
 })
 
