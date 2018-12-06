@@ -17,8 +17,8 @@ const scopes = require('./scopes')
 const structures = require('./structures')
 const translations = require('./translations')
 
-const data = new Events.EventEmitter()
 const client = new Discord.Client(scopes.properties.client.options)
+const data = new Events.EventEmitter()
 
 let assets = {
   users: JSON.parse(fs.readFileSync('./assets/users.json', 'utf8')),
@@ -34,8 +34,8 @@ let assets = {
 }
 
 data.on('modified', (which, input) => {
-  fs.writeFile(`./assets/${which}.json`, JSON.stringify(input), 'utf8', callbacks.fs.writeFile)
   assets[which] = input
+  fs.writeFile(`./assets/${which}.json`, JSON.stringify(input), 'utf8', callbacks.fs.writeFile)
 })
 
 client.login(scopes.properties.client.token)
@@ -61,30 +61,17 @@ client.on('message', message => {
     (!plugins[options.message.construct])
   if (enviroment) return
 
-  let translate = translations(options.user.language)
+  let translate = translations.get(options.user.language)
   let plugin = plugins[options.message.construct]
 
   const evaluation = [
     (message.channel.type === 'text'),
     ((options.permissions & scopes.properties.application.permissions[plugin.permissions]) === scopes.properties.application.permissions[plugin.permissions])
   ]
-  if (evaluation.includes(false)) return message.reply(translate.generic.errors.evaluation[evaluation.indexOf(false)])
+  if (evaluation.includes(false)) return message.reply(translate.errors.evaluation[evaluation.indexOf(false)])
 
   message.channel.startTyping()
   extensions.fetch(client, message, options)
-  plugin.execute(client, message, options, translate)
+  plugin.execute(client, message, options, translate).catch(rejection => message.reply(translate.documentation[options.message.construct].rejection))
   message.channel.stopTyping()
-})
-
-client.on('guildMemberAdd', member => {
-  if (!assets.guilds[member.guild.id]) return
-  const disabled =
-    (!assets.guilds[member.guild.id].welcome) ||
-    (!client.channels.get(assets.guilds[member.guild.id].welcome.channel).permissionsFor(member.guild.client.user).has('SEND_MESSAGES'))
-  if (disabled) return
-
-  const welcome = assets.guilds[member.guild.id].welcome.message
-    .replace(/{member}/, member)
-    .replace(/{server}/, member.guild.name)
-  client.channels.get(assets.guilds[member.guild.id].welcome.channel).send(welcome)
 })

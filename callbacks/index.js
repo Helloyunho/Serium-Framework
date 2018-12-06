@@ -1,5 +1,1 @@
-module.exports = {
-  fs: {
-    writeFile: require('./fs/writeFile')
-  }
-}
+module.exports.fs = require('./fs')

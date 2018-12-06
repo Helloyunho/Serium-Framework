@@ -3,16 +3,22 @@ const library = {
   language: require('./library/path/to/file')
 }
 
-module.exports = (language, data) => {
-  const template = library[language]
-  return template
-}
-
-module.exports.library = library
 module.exports.contributors = {
   ko: 'NickName OR User (recognizable);Identificate'
 }
 
+module.exports = class {
+  constructor(language) {
+    this.package = library[language]
+  }
+
+  get(property) {
+    let grain = this.package
+
+    property.split('.').forEach(i => grains = grains[i])
+    return grain
+  }
+}
 
 * This handled by each plugins and below is description for this object.
 
